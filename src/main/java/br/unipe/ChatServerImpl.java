@@ -14,19 +14,16 @@ public class ChatServerImpl extends UnicastRemoteObject implements ChatServer {
 	
 	public ChatServerImpl() throws RemoteException {
 		super();
+		this.mensagem = "";
 	}
 
 	@Override
-	public synchronized void enviar(String mensagem) throws RemoteException {
+	public void enviar(String mensagem) throws RemoteException {
 		this.mensagem = mensagem;
 	}
 
 	@Override
-	public void ler() throws RemoteException {
-		String mensagemAntiga = "";
-		while(mensagemAntiga != this.mensagem) {
-			System.out.println(mensagem);
-			mensagemAntiga = this.mensagem;
-		}
+	public String ler() throws RemoteException {
+		return mensagem;
 	}
 }

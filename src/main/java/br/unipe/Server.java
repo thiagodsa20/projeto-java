@@ -11,13 +11,13 @@ public class Server {
 	public Server() {
 		System.out.println("Iniciando servidor...");
 		try {
-			Registry r = LocateRegistry.createRegistry(80);
-			ChatServer chat = new ChatServerImpl();
-			Naming.rebind("rmi://localhost/MiniChat", chat);
+			Registry registry = LocateRegistry.createRegistry(8080);
+			ChatServer server = new ChatServerImpl();
+			Naming.rebind("rmi://127.0.0.1:8080/chat", server);
+			System.out.println("Server ON!");
 		} catch (RemoteException | MalformedURLException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Server ON!");
 	}
 	
 	public static void main(String[] args) {

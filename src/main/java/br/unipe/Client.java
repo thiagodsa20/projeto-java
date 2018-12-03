@@ -11,14 +11,11 @@ public class Client {
 	private ChatServer chat;
 	
 	public Client() {
-		System.out.println("Iniciando client");
+		System.out.println("Iniciando client...");
 		try {
-			chat = (ChatServer) Naming.lookup("rmi://locahost/MiniChat");
-			System.out.println("Cliente iniciado");
-			if (chat == null) {
-				throw new NaoFoiPossivelConectarException();
-			}
-		} catch (RemoteException | MalformedURLException | NotBoundException | NaoFoiPossivelConectarException e) {
+			chat = (ChatServer) Naming.lookup("rmi://127.0.0.1:8080/chat");
+			System.out.println("Cliente iniciado!");
+		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			e.printStackTrace();
 		}
 	}
@@ -27,9 +24,7 @@ public class Client {
 		Scanner scan = new Scanner(System.in);
 		Client client = new Client();
 		Usuario usuario = new Usuario();
-		
-		System.out.println("Digite seu nick");
-		usuario.setApelido(scan.nextLine());
+		String mensagem = "";
 		
 		Thread t = new Thread(new Runnable() {
 			@Override
@@ -46,7 +41,19 @@ public class Client {
 				}
 			}
 		});
-		
-		t.start();
+			
+		try {
+			System.out.println("Digite seu nick: ");
+			usuario.setApelido(scan.nextLine());
+			client.chat.enviar("Bem vindo ao chat " + usuario.getApelido() + "!");
+			
+			while(mensagem != client.chat.ler()) {
+				System.out.println(client.chat.ler());
+			}
+			
+			t.start();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 }
