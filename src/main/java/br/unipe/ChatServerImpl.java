@@ -2,28 +2,21 @@ package br.unipe;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Vector;
 
 public class ChatServerImpl extends UnicastRemoteObject implements ChatServer {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2637287996882942816L;
-	
-	private String mensagem;
+	private Vector<String> mensagens;
 	
 	public ChatServerImpl() throws RemoteException {
-		super();
-		this.mensagem = "";
+		this.mensagens = new Vector<String>();
 	}
-
-	@Override
+	
 	public void enviar(String mensagem) throws RemoteException {
-		this.mensagem = mensagem;
+		this.mensagens.add(mensagem);
 	}
-
-	@Override
-	public String ler() throws RemoteException {
-		return mensagem;
+	
+	public synchronized Vector<String> ler() throws RemoteException {
+		return this.mensagens;
 	}
 }

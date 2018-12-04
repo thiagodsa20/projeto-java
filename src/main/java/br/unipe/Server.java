@@ -13,7 +13,7 @@ public class Server {
 		try {
 			Registry registry = LocateRegistry.createRegistry(8080);
 			ChatServer server = new ChatServerImpl();
-			Naming.rebind("rmi://127.0.0.1:8080/chat", server);
+			Naming.rebind("//127.0.0.1:8080/chat", server);
 			System.out.println("Server ON!");
 		} catch (RemoteException | MalformedURLException e) {
 			e.printStackTrace();

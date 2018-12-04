@@ -8,50 +8,57 @@ import java.util.Scanner;
 
 public class Client {
 	
-	private ChatServer chat;
+	private static ChatServer conexao;
 	
-	public Client() {
-		System.out.println("Iniciando client...");
-		try {
-			chat = (ChatServer) Naming.lookup("rmi://127.0.0.1:8080/chat");
-			System.out.println("Cliente iniciado!");
-		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			e.printStackTrace();
+	public static ChatServer getConexao() {
+		if (conexao == null) {
+			System.out.println("Iniciando client...");
+			try {
+				conexao = (ChatServer) Naming.lookup("//127.0.0.1:8080/chat");
+				System.out.println("Cliente iniciado!");
+			} catch (RemoteException | MalformedURLException | NotBoundException e) {
+				e.printStackTrace();
+			}
 		}
+		return conexao;
 	}
 	
 	public static void main(String[] args) {
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
-		Client client = new Client();
 		Usuario usuario = new Usuario();
-		String mensagem = "";
 		
 		Thread t = new Thread(new Runnable() {
+			
 			@Override
 			public void run() {
-				Scanner scan = new Scanner(System.in);
-				String input = null;
-				while(input != null && input != "Sair") {
-					input = scan.nextLine();
-					try {
-						client.chat.enviar(input);
-					} catch (RemoteException e) {
-						e.printStackTrace();
+				try {
+					while(true) {
+						int qntMensagens = Client.getConexao().ler().size();
+						if(qntMensagens < Client.getConexao().ler().size()) {
+							String a = Client.getConexao().ler().get(0);
+							System.out.println(Client.getConexao().ler().lastElement());
+						}
 					}
+				} catch (RemoteException e) {
+					e.printStackTrace();
 				}
 			}
 		});
-			
+		
+		t.start();
+		
 		try {
-			System.out.println("Digite seu nick: ");
-			usuario.setApelido(scan.nextLine());
-			client.chat.enviar("Bem vindo ao chat " + usuario.getApelido() + "!");
+			String input = "";
+			System.out.println("Digite seu apelido: ");
+			input = scan.nextLine();
+			usuario.setApelido(input);
+			Client.getConexao().enviar("Bem vindo ao chat "+ usuario.getApelido());
 			
-			while(mensagem != client.chat.ler()) {
-				System.out.println(client.chat.ler());
+			
+			while(input != "sair") {
+				input = scan.nextLine();
 			}
-			
-			t.start();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
