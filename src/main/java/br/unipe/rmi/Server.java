@@ -1,4 +1,4 @@
-package br.unipe;
+package br.unipe.rmi;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

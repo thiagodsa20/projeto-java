@@ -1,4 +1,4 @@
-package br.unipe;
+package br.unipe.rmi;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

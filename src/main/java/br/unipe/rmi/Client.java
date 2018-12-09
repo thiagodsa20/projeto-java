@@ -1,10 +1,12 @@
-package br.unipe;
+package br.unipe.rmi;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Scanner;
+
+import br.unipe.Usuario;
 
 public class Client {
 	
@@ -27,17 +29,19 @@ public class Client {
 		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		Usuario usuario = new Usuario();
+		ChatServer conexao = Client.getConexao();
+		
 		
 		Thread t = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				try {
+					int qntMensagens = conexao.ler().size();
 					while(true) {
-						int qntMensagens = Client.getConexao().ler().size();
 						if(qntMensagens < Client.getConexao().ler().size()) {
-							String a = Client.getConexao().ler().get(0);
-							System.out.println(Client.getConexao().ler().lastElement());
+							System.out.println(conexao.ler().lastElement());
+							qntMensagens = conexao.ler().size();
 						}
 					}
 				} catch (RemoteException e) {
@@ -53,11 +57,12 @@ public class Client {
 			System.out.println("Digite seu apelido: ");
 			input = scan.nextLine();
 			usuario.setApelido(input);
-			Client.getConexao().enviar("Bem vindo ao chat "+ usuario.getApelido());
-			
+			conexao.enviar("Bem vindo ao chat "+ usuario.getApelido());
+			System.out.println("Digite sua mensagem");
 			
 			while(input != "sair") {
 				input = scan.nextLine();
+				conexao.enviar(usuario.getApelido() +" diz: "+ input);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
