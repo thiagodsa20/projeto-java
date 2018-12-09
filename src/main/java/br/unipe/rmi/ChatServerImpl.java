@@ -6,6 +6,11 @@ import java.util.Vector;
 
 public class ChatServerImpl extends UnicastRemoteObject implements ChatServer {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1561651367832653962L;
+	
 	private Vector<String> mensagens;
 	
 	public ChatServerImpl() throws RemoteException {
