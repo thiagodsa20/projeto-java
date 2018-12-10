@@ -29,7 +29,7 @@ public class ConexaoUtil {
 	
 	public void closeConnection() {
 		try {
-			ConexaoUtil.getInstance().getConnection().close();
+			getConnection().close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -37,7 +37,7 @@ public class ConexaoUtil {
 	
 	public void rollback() {
 		try {
-			ConexaoUtil.getInstance().getConnection().rollback();
+			getConnection().rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +45,7 @@ public class ConexaoUtil {
 	
 	public void commit() {
 		try {
-			ConexaoUtil.getInstance().getConnection().commit();
+			getConnection().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

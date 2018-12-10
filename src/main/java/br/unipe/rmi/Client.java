@@ -4,10 +4,15 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Scanner;
 
+import br.unipe.dao.MensagemDAO;
 import br.unipe.dao.UsuarioDAO;
+import br.unipe.dto.MensagemDTO;
 import br.unipe.dto.UsuarioDTO;
+import br.unipe.util.Utils;
 
 public class Client {
 	
@@ -27,15 +32,15 @@ public class Client {
 	}
 	
 	public static void main(String[] args) {
-		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);
 		UsuarioDTO usuario = new UsuarioDTO();
 		UsuarioDAO usuarioDAO = new UsuarioDAO();
+		MensagemDAO mensagemDAO = new MensagemDAO();
+		MensagemDTO mensagem = new MensagemDTO();
 		ChatServer conexao = Client.getConexao();
-		
+		Calendar c = Calendar.getInstance();
 		
 		Thread t = new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
 				try {
@@ -77,20 +82,35 @@ public class Client {
 			}
 			
 			if(autenticado) {
-				conexao.enviar("Bem vindo ao chat "+ usuario.getApelido());
+				conexao.enviar(usuario.getApelido() + " está ONLINE!");
+				usuario = usuarioDAO.buscarPorApelido(usuario.getApelido());
+				mensagem.setIdUsuario(usuario.getId());
 				
 				t.start();
 				System.out.println("Digite sua primeira mensagem: ");
 				
-				while(input != "/sair") {
+				ArrayList<MensagemDTO> mensagens = new ArrayList<>();
+				
+				while(!input.equals("/sair")) {
 					input = scan.nextLine();
 					conexao.enviar(usuario.getApelido() +" diz: "+ input);
+					
+					mensagem = new MensagemDTO();
+					mensagem.setIdUsuario(usuario.getId());
+					mensagem.setConteudo(input);
+					mensagem.setData(c.getTime());
+					
+					mensagens.add(mensagem);
 				}
+				
+				Utils.persistirMensagens(mensagens);
 				usuario.setOnline("N");
 				usuarioDAO.atualizar(usuario);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+		
+		scan.close();
 	}
 }
