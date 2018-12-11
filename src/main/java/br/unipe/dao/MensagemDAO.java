@@ -20,10 +20,14 @@ public class MensagemDAO {
 		String sql = "INSERT INTO T_MENSAGEM (ID_USUARIO, CONTEUDO, DATA) VALUES (?, ?, ?)";
 		
 		try {
+			//Preparando consulta para enviar para o banco
 			PreparedStatement st = conexao.prepareStatement(sql);
+			
+			//Setando parametros
 			st.setLong(1, mensagem.getIdUsuario());
 			st.setString(2, mensagem.getConteudo());
 			st.setDate(3, new Date(mensagem.getData().getTime()));
+			st.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ConexaoUtil.getInstance().rollback();

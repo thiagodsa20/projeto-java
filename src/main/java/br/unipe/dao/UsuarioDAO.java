@@ -26,7 +26,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO> {
 			st.setString(2, usuarioDTO.getSenha());
 			st.setString(3, usuarioDTO.getOnline());
 			st.execute();
-			ConexaoUtil.getInstance().commit();
+//			ConexaoUtil.getInstance().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ConexaoUtil.getInstance().rollback();
@@ -51,7 +51,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO> {
 			st.setString(3, usuarioDTO.getOnline());
 			st.setLong(4, usuarioDTO.getId());
 			st.execute();
-			ConexaoUtil.getInstance().commit();
+//			ConexaoUtil.getInstance().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ConexaoUtil.getInstance().rollback();
@@ -139,7 +139,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO> {
 		sql.append(" FROM T_USUARIO ");
 		sql.append(" WHERE APELIDO = ? ");
 		
-		String online = null;
+		String ONLINE = null;
 		
 		try {
 			PreparedStatement st = conexao.prepareStatement(sql.toString());
@@ -147,9 +147,9 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO> {
 			ResultSet resultSet = st.executeQuery();
 			
 			while(resultSet.next()) {
-				online = resultSet.getString(3);
+				ONLINE = resultSet.getString(3);
 			}
-			ConexaoUtil.getInstance().commit();
+//			ConexaoUtil.getInstance().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ConexaoUtil.getInstance().rollback();
@@ -157,7 +157,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO> {
 			ConexaoUtil.getInstance().closeConnection();
 		}
 		
-		return online;
+		return ONLINE;
 	}
 	
 	public void setTodosUsuariosOffline() {
@@ -167,7 +167,7 @@ public class UsuarioDAO implements GenericDAO<UsuarioDTO> {
 			PreparedStatement st = conexao.prepareStatement(sql);
 			st.setString(1, "N");
 			st.execute();
-			ConexaoUtil.getInstance().commit();
+//			ConexaoUtil.getInstance().commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			ConexaoUtil.getInstance().rollback();

@@ -18,12 +18,11 @@ public class ConexaoUtil {
 	public Connection getConnection() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/chatrmi", "root", "toor");
-			connection.setAutoCommit(false);
-			return connection;
-		} catch (SQLException | ClassNotFoundException e) {
+			return DriverManager.getConnection("jdbc:mysql://localhost:3306/chatrmi?createDatabaseIfNotExist=true", "root", "");
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return null;
 	}
 	

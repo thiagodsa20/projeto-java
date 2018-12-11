@@ -1,5 +1,6 @@
 package br.unipe.dao;
 
+@Deprecated
 public interface GenericDAO<T> {
 	
 	void inserir(T objeto);

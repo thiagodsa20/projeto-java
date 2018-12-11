@@ -48,7 +48,7 @@ public class UsuarioDTO {
 			if (usuarioDTO.isOnline()) {
 				throw new UsuarioJaEstaLogadoException();
 			}
-			if(usuarioDTO.getSenha() != getSenha()) {
+			if(!senha.equals(usuarioDTO.getSenha())) {
 				System.out.println("Senha incorreta!");
 				return false;
 			}
